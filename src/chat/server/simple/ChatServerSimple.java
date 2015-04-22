@@ -1,42 +1,38 @@
-// jednoduchý server schopný přijmou jen jednou jednoho klienta
-// server opakuje, co klient píše
-// pro připojení lze využít PuTTY (raw spojení na localhost, port 3333)
+// Simple Chat server with socket
+// Server accepts one client at a time and then ends.
+// For testing use PuTTY, connect to localhost, port 3333, raw connection.
+// To end the session, write QUIT to the server alone on the line.
 
 package chat.server.simple;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Administrator
- */
 public class ChatServerSimple {
 
     public static void main(String[] args) {
-        int port = 3333;
+        final int PORT = 3333;
+        BufferedReader streamIn;
         try {
-            System.out.println("Připojuji se na port: " + port);
-            ServerSocket server = new ServerSocket(port);
-            System.out.println("Server běží: " + server);
-            System.out.println("Čekám na klienta...");
+            System.out.println("Simple Chat server started and binded to port: " + PORT);
+            ServerSocket server = new ServerSocket(PORT);
+            System.out.println("Server is running and waiting: " + server);
             Socket socket = server.accept();
-            System.out.println("Klient přijat: " + socket);
-            DataInputStream streamIn;
-            streamIn = new DataInputStream(
-                    new BufferedInputStream(socket.getInputStream()));
+            System.out.println("Client accepted at: " + socket);
+            streamIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             while (true) {
-                String line = streamIn.readUTF();
+                String line = streamIn.readLine();
                 System.out.println(line);
                 if (line.equals("QUIT")) {
                     break;
                 }
             }
+            System.out.println("Server ends now. Bye.");
             socket.close();
             streamIn.close();
         } catch (IOException ex) {
