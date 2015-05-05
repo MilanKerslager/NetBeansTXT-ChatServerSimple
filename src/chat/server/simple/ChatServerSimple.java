@@ -1,7 +1,8 @@
 // Simple Chat server with socket
 // Server accepts one client at a time and then ends.
+// The communication is one way only (server shows what client sends).
 // For testing use PuTTY, connect to localhost, port 3333, raw connection.
-// To end the session, write QUIT to the server alone on the line.
+// To end the session, write QUIT on the client side alone on the line.
 // https://github.com/MilanKerslager/NetBeansTXT-ChatServerSimple
 
 package chat.server.simple;
@@ -33,7 +34,7 @@ public class ChatServerSimple {
                     break;
                 }
             }
-            System.out.println("Server ends now. Bye.");
+            System.out.println("Client sended QUIT so server ends now. Bye.");
             socket.close();
             streamIn.close();
         } catch (IOException ex) {
